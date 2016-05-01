@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <string.h>
 using namespace std;
 class TreeNode {
 public:
@@ -17,6 +18,7 @@ void process(TreeNode* root,string str,vector<string>&  v){
 		v.push_back(str);
 		return ; 
 	}
+	char* strTemp=str;
 	char c[1];
 	itoa(root->val,c,10);
 	strcat(str,c);
@@ -27,7 +29,8 @@ void process(TreeNode* root,string str,vector<string>&  v){
 		process(root->right,str,v);
 	}
 	//从str中删除字符c
-	str[ strlen(str)-1]='\0';
+	int len = strlen(str); // 获取str的字符串长度
+	str[len - 1]= '\0'; // 用'\0'覆盖最后一个有效字符
 }
 
 vector<string> binaryTreePaths(TreeNode* root) {
