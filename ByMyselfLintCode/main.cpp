@@ -4,7 +4,9 @@
 #include <string.h>
 #include <sstream> 
 #include <stack> 
+#include <iostream>
 using namespace std;
+
 class TreeNode {
 public:
 	int val;
@@ -14,20 +16,6 @@ public:
 		this->left = this->right = NULL;
 	}
 };
-//string int2String(int a){
-//	stack<int> s;
-//	while (a){ 
-//		s.push(a%10);
-//		a=a/10;
-//	}
-//    char str[ s.size() ];
-//	while (s.size() ){ 
-//		cout<< 
-//		str[]= s.top();
-//		s.pop();
-//	}
-//	return str;
-//}
 string int2str(const int &int_temp)  {  
 	stringstream stream;  
 	stream<<int_temp;  
@@ -35,19 +23,18 @@ string int2str(const int &int_temp)  {
 	stream>>string_temp ;   //此处也可以用 stream>>string_temp  
 	return string_temp;
 }
+std::string to_string (int value);
 void process(TreeNode* root,vector<int> vc,vector<string>&  v){
 	if (root != NULL && root->left == NULL && root->right == NULL) {
 		vc.push_back(root->val);
 		string str="";
-		vector<int>::iterator it;
-		for (it=vc.begin();it!=vc.end();it++){ 
-			str += int2str(*it);
-			// str +=itoa((*it),strTemp,10);//itoa函数int-->string有些IDE不识别。	
+		str += int2str(vc[0]);
+
+		for(unsigned int i=1;i<vc.size();i++){//1  ->3  ->5。。从第2个元素开始让“->”跟着后的数字。
 			str += "->";
+			str += int2str(vc[i]);
+
 		}
-		int len=str.size();
-		str [len-2]='\0';
-		cout<<str<<endl;
 		v.push_back(str);
 		return ; 
 	}
