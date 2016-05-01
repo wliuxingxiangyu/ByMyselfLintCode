@@ -11,36 +11,58 @@ public:
 		this->val = val;
 		this->left = this->right = NULL;
 	}
-}
+};
 
-void process(TreeNode* root,string str,vector<string>&  v){
-	if (root == NULL) {
+void process(TreeNode* root,vector<char> vc,vector<string>&  v){
+	if (root != NULL && root->left == NULL && root->right == NULL) {
+		vc.push_back(root->val + '0');
+		string str="";
+		for (vector<char>::iterator it=vc.begin();it!=vc.end();it++){ 
+			str += *it;
+			// str += "->";
+		}
 		v.push_back(str);
 		return ; 
 	}
-	char* strTemp=str;
-	char c[1];
-	itoa(root->val,c,10);
-	strcat(str,c);
+
+	vc.push_back(root->val + '0');//int 10+48_'0'=58_':'
+
 	if(root->left != NULL){
-		process(root->left,str,v);
+		vc.push_back('-');
+		vc.push_back('>');
+		process(root->left,vc ,v);
+		vc.pop_back();
+		vc.pop_back();
 	}
+
 	if(root->right != NULL){
-		process(root->right,str,v);
+		vc.push_back('-');
+		vc.push_back('>');
+		process(root->right,vc,v);
+		vc.pop_back();
+		vc.pop_back();
 	}
-	//从str中删除字符c
-	int len = strlen(str); // 获取str的字符串长度
-	str[len - 1]= '\0'; // 用'\0'覆盖最后一个有效字符
+
+	//从vc中删除尾字符，往上回溯。进入下一个分支。
+	vc.pop_back();
 }
 
 vector<string> binaryTreePaths(TreeNode* root) {
-	if (root == NULL) return;
 	vector<string>  v;
-	string str;
-	process(root,str,v);
+	if (root == NULL) return v;
+	vector<char> vc;
+	process(root,vc,v);
 	return v;
 }
 
 int  main(){
+	TreeNode* root=new TreeNode(10);
+	//root->left=new TreeNode(2);
+	//root->right=new TreeNode(3);
+
+	//root->left->left=NULL;
+	//root->left->right=new TreeNode(5);
+
+	binaryTreePaths(root);
 	system("pause");
 }
