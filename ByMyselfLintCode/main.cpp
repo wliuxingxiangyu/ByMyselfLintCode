@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <string.h>
 #include <sstream> 
 #include <stack> 
 #include <iostream>
@@ -16,7 +15,7 @@ public:
 		this->left = this->right = NULL;
 	}
 };
-string int2str(const int &int_temp)  {  
+string int2str(const int &int_temp)  {  //因为有些IDE不支持itoa方法，自定义的int->string
 	stringstream stream;  
 	stream<<int_temp;  
 	string string_temp;
@@ -29,7 +28,7 @@ void process(TreeNode* root,vector<int> vc,vector<string>&  v){
 		vc.push_back(root->val);
 		string str="";
 		str += int2str(vc[0]);
-
+		
 		for(unsigned int i=1;i<vc.size();i++){//1  ->3  ->5。。从第2个元素开始让“->”跟着后的数字。
 			str += "->";
 			str += int2str(vc[i]);
@@ -70,5 +69,14 @@ int  main(){
 	root->left->right=new TreeNode(5);
 
 	binaryTreePaths(root);
+
+	cout<<" strlen和size都是测有效字符，不包括“\0” "<<endl;
+	char c[100]={'a','b'};
+	cout<<"strlen(字符数组c)="  <<strlen(c)<<endl;//输出2
+	// cout<<"c.size()="  <<c.size()<<endl;//报错，无此用法
+	
+	string str="abc";
+	cout<<"字符串str.size()="  <<str.size()<<endl;//输出3
+	//cout<<"strlen(str)="  <<strlen(str)<<endl;//报错，无此用法
 	system("pause");
 }
