@@ -4,6 +4,9 @@
 #include <sstream> 
 #include <stack> 
 #include <iostream>
+#include <algorithm>
+#include <math.h>
+#include <limits.h>
 using namespace std;
 
 class TreeNode {
@@ -15,27 +18,23 @@ public:
 		this->left = this->right = NULL;
 	}
 };
-int maxPathSum(TreeNode *root){
-	if(root == NULL) return 0;
-	int rootVal=root->val;
-	int maxleft=maxPathSum(root->left);
-	int maxright=maxPathSum(root->right);
 
-	if(rootVal>0){//加上正数rootVal
-		if(maxleft>maxright){
-			return  maxleft>=0 ? (rootVal + maxleft) : maxleft;//单点{+1}AC
-		}else{
-			return maxright>=0 ? (rootVal + maxright) :maxright;
-		} 
-	}else{//不加上负数rootVal
-		if(maxleft>maxright){
-			return  maxleft<=0 ? (rootVal + maxleft) : maxleft;//单点{-1}AC
-		}else{
-			return maxright<=0 ? (rootVal + maxright) :maxright;
-		} 
-	}
+int max_sum;
+int dfs(const TreeNode *root) {
+	if (root  == nullptr) return 0;
+	int l = dfs(root->left);
+	int r = dfs(root->right);
+	int sum = root->val;
+	if (l > 0) sum += l;
+	if (r > 0) sum += r;
+	max_sum = max(max_sum, sum);//全局变量保存返回结果，在每次递归中更新.
+	return max(r, l) > 0 ? max(r, l) + root->val : root->val;
+}
 
-
+int maxPathSum(TreeNode *root) {
+	max_sum = INT_MIN;
+	dfs(root);
+	return max_sum;
 }
 
 int  main(){
