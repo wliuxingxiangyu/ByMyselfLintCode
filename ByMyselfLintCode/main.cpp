@@ -19,22 +19,33 @@ public:
 	}
 };
 
-int max_sum;
-int dfs(const TreeNode *root) {
-	if (root  == nullptr) return 0;
-	int l = dfs(root->left);
-	int r = dfs(root->right);
-	int sum = root->val;
-	if (l > 0) sum += l;
-	if (r > 0) sum += r;
-	max_sum = max(max_sum, sum);//全局变量保存返回结果，在每次递归中更新.
-	return max(r, l) > 0 ? max(r, l) + root->val : root->val;
+void process(TreeNode *root, int target,vector<vector<int>>&  resvv,vector<int>& v,int sum){
+	if(root == NULL) return;
+	if(root->left == NULL && root->right == NULL ){//叶子结点
+		if(sum+ root->val == target){ //找到了，加入resvv
+			v.push_back(root->val);
+			resvv.push_back(v);
+			v.pop_back();
+		}
+		return;//到了叶子就要返回
+	}
+	v.push_back(root->val);
+	sum += root->val;
+	process(root->left, target,resvv,v,sum);
+	process(root->right, target,resvv,v,sum);
+	if(v.size() != 0)  v.pop_back();//返回时要弹出 最后的元素，不管是否找到。
+
 }
 
-int maxPathSum(TreeNode *root) {
-	max_sum = INT_MIN;
-	dfs(root);
-	return max_sum;
+vector<vector<int>> binaryTreePathSum(TreeNode *root, int target) {
+	vector<vector<int>>  resvv;
+	if(root == NULL) return resvv;
+
+	vector<int> v;
+	int sum=0;
+	process(root,target,resvv,v,sum);
+
+	return resvv;
 }
 
 int  main(){
@@ -44,8 +55,11 @@ int  main(){
 
 	TreeNode* root2=new TreeNode(1);//test2
 	root2->left=new TreeNode(2);
-	root2->right=new TreeNode(3);
+	root2->right=new TreeNode(4);
 
-	cout<< "maxPathSum(root)="<<maxPathSum(root2)<<endl;
+	root2->left->left=new TreeNode(2);
+	root2->left->right=new TreeNode(5);
+	binaryTreePathSum(root2,5);
+	cout<< "maxPathSum(root)="<<endl;
 	system("pause");
 }
