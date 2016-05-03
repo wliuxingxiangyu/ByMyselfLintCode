@@ -43,6 +43,10 @@ int  main(){
 	root->left=new TreeNode(2);
 	root->left->left=new TreeNode(3);
 
-	cout<< "maxPathSum(root)="<<maxPathSum(root)<<endl;
+	TreeNode* root2=new TreeNode(1);
+	root2->left=new TreeNode(2);
+	root2->right=new TreeNode(3);
+
+	cout<< "maxPathSum(root)="<<maxPathSum(root2)<<endl;
 	system("pause");
 }
