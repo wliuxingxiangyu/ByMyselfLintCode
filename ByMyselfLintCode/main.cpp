@@ -9,57 +9,65 @@
 #include <limits.h>
 using namespace std;
 
-class TreeNode {
-public:
+struct TreeLinkNode {
 	int val;
-	TreeNode *left, *right;
-	TreeNode(int val) {
-		this->val = val;
-		this->left = this->right = NULL;
+	TreeLinkNode *left;
+	TreeLinkNode *right;
+	TreeLinkNode *next;
+	TreeLinkNode(int val){
+		this->val=val;
+		this->left = this->right=this->next = NULL;
 	}
 };
 
-void process(TreeNode *root, int target,vector<vector<int>>&  resvv,vector<int>& v,int sum){
-	if(root == NULL) return;
-	if(root->left == NULL && root->right == NULL ){//叶子结点
-		if(sum+ root->val == target){ //找到了，加入resvv
-			v.push_back(root->val);
-			resvv.push_back(v);
-			v.pop_back();
-		}
-		return;//到了叶子就要返回
+void process(TreeLinkNode *cur,TreeLinkNode *nextNode){
+	if(cur==NULL) {
+		return;
 	}
-	v.push_back(root->val);
-	sum += root->val;
-	process(root->left, target,resvv,v,sum);
-	process(root->right, target,resvv,v,sum);
-	if(v.size() != 0)  v.pop_back();//返回时要弹出 最后的元素，不管是否找到。
+	if(nextNode==NULL) {
+		cur->next=NULL;
+		return;
+	}
+	cur->next=nextNode;
 
+	process(cur->left,cur->right);  
+	process(cur->right,cur->next->left);  
 }
 
-vector<vector<int>> binaryTreePathSum(TreeNode *root, int target) {
-	vector<vector<int>>  resvv;
-	if(root == NULL) return resvv;
+void   preProcess(TreeLinkNode *root){
+	if(root == NULL) return;
+	root->next=root;
+	preProcess(root->right);
+}
 
-	vector<int> v;
-	int sum=0;
-	process(root,target,resvv,v,sum);
+void   afterProcess(TreeLinkNode *root){
+	if(root == NULL) return;
+	root->next=NULL;
+	afterProcess(root->right);
+}
 
-	return resvv;
+void connect(TreeLinkNode *root) {
+	if(root == NULL) return;
+	preProcess(root);
+	process(root->left,root->right);  
+	process(root->right,root->next->left);  
+	afterProcess(root);
+
+
 }
 
 int  main(){
-	TreeNode* root=new TreeNode(1);//test1
-	root->left=new TreeNode(2);
-	root->left->left=new TreeNode(3);
+	TreeLinkNode* root=new TreeLinkNode(0);//test1
+	root->left=new TreeLinkNode(1);
+	root->right=new TreeLinkNode(2);
 
-	TreeNode* root2=new TreeNode(1);//test2
-	root2->left=new TreeNode(2);
-	root2->right=new TreeNode(4);
+	root->left->left=new TreeLinkNode(3);
+	root->left->right=new TreeLinkNode(4);
 
-	root2->left->left=new TreeNode(2);
-	root2->left->right=new TreeNode(5);
-	binaryTreePathSum(root2,5);
+	root->right->left=new TreeLinkNode(5);
+	root->right->right=new TreeLinkNode(6);
+	
+	connect(root);
 	cout<< "maxPathSum(root)="<<endl;
 	system("pause");
 }
