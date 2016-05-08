@@ -42,7 +42,7 @@ int GetWidth(TreeNode *pRoot)  {   //求二叉树的宽度,定义为具有最多结点数的层中包
 
 	while (!myQueue.empty())  {//队列不空  
 		nTempLastLevelWidth = nLastLevelWidth;  
-		while (nTempLastLevelWidth != 0)  	{  
+		while (nTempLastLevelWidth != 0)  	{ //用于跳出while内层循环//已加入根节点 
 			pCur = myQueue.front();//取出队列头元素  
 			myQueue.pop();//将队列头元素出对  
 			nTempLastLevelWidth--; 
@@ -53,7 +53,7 @@ int GetWidth(TreeNode *pRoot)  {   //求二叉树的宽度,定义为具有最多结点数的层中包
 
 		nCurLevelWidth = myQueue.size();  
 		nWidth = max(nCurLevelWidth , nWidth);//当前层最多的节点数
-		nLastLevelWidth = nCurLevelWidth;  
+		nLastLevelWidth = nCurLevelWidth;//进行下层求宽度  
 	}  
 
 	return nWidth;  
