@@ -38,7 +38,6 @@ bool isPalindromeMy(string& s) {
 		if(c1 != c2) return false;
 		i++;j--;
 	}
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
 	return true;
 
 }
