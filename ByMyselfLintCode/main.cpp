@@ -18,7 +18,7 @@ bool isCharOrNumber(char c){
 	}
 }
 
-bool isPalindrome(string& s) {
+bool isPalindromeMy(string& s) {
 	int len=s.size();
 	if( len == 0) return true;
 	int i=0,j=len-1;
@@ -38,13 +38,29 @@ bool isPalindrome(string& s) {
 		if(c1 != c2) return false;
 		i++;j--;
 	}
-
+	transform(s.begin(), s.end(), s.begin(), ::tolower);
 	return true;
 
 }
 
+//lintcode²Î¿¼´úÂë
+bool isPalindrome(string s) {
+	transform(s.begin(), s.end(), s.begin(), ::tolower);
+	string ::iterator left,right;
+	left = s.begin(), right = prev(s.end());
+	while (left < right) {
+		if (!::isalnum(*left)) ++left;
+		else if (!::isalnum(*right)) --right;
+		else if (*left != *right) return false;
+		else{ left++, right--; }
+	}
+	return true;
+}
+
+
 int  main(){
-	string str="1a2";
+	string str=".,";
+	//string str="A man, a plan, a canal: Panama";
 	cout<< "isPalindrome(str)="<< isPalindrome(str)<<endl;
 
 	system("pause");
