@@ -10,57 +10,54 @@
 #include <queue> 
 using namespace std;
 
-bool isCharOrNumber(char c){
-	if ( (c>='0' && c<='9') || (c>='A' && c<='Z') || (c>='a' && c<='z') ){ 
-		return true;
-	} else{
-		return false;
+int pow(int x,int y){
+	if (y == 0) return 1;
+
+	while(--y){
+		x *=10;
 	}
+	return x;
 }
+//判断1221是否是回文数？myself思路乱。两个位数往中间走，不如lintcode直接操作原数。
+bool isPalindromeMy(int x) {//代码有误
+	if (x<10 && x>-10)  return true;//-12321为回文数，先取绝对值
+	int temp=abs(x),itNum=0;//迭代次数 为了mod出 最低位 
+	int power=1,high =temp/10,low,shang;
+	while (high>10) { high /=10; power++;}
 
-bool isPalindromeMy(string& s) {
-	int len=s.size();
-	if( len == 0) return true;
-	int i=0,j=len-1;
-	char c1,c2;
-	while(i<j){
-		while(i<len && ! isCharOrNumber(s[i]) ) i++;
-		if(i==len) return true; //全是非字符，返回true.
-
-		if(s[i]>='A' && s[i]<='Z'  ) c1=s[i]+32;
-		else c1=s[i];
-
-		while(j>0 && ! isCharOrNumber(s[j]) )  j--;
-
-		if(s[j]>='A' && s[j]<='Z'  ) c2=s[j]+32;
-		else c2=s[j];
-
-		if(c1 != c2) return false;
-		i++;j--;
+	while (itNum <= (power+1)/2 ){
+	    shang=temp/pow(10,itNum);
+		low=shang %10;
+		cout<<"itNum="<<itNum<<",(power+1)/2="<<(power+1)/2  <<",high="<<high<<",low="<<low<<endl;
+		if ( high != low)  return false;
+		
+		itNum++;
+		high=temp%pow(10, power)/pow(10, power-1);
+		power--;
 	}
 	return true;
-
 }
-
 //lintcode参考代码
-bool isPalindrome(string s) {
-	transform(s.begin(), s.end(), s.begin(), ::tolower);
-	string ::iterator left,right;
-	left = s.begin(), right = prev(s.end());
-	while (left < right) {
-		if (!::isalnum(*left)) ++left;
-		else if (!::isalnum(*right)) --right;
-		else if (*left != *right) return false;
-		else{ left++, right--; }
+bool isPalindrome(int x) {
+	if (x < 0) return false;
+	int d = 1; // divisor
+	while (x / d >= 10) d *= 10; //1234的d=1000.
+	while (x > 0) {
+		int q = x / d; // quotient
+		int r = x % 10; // remainder
+		if (q != r) return false;
+		x = x % d / 10; //去除x的最前最后一位。模最高幂次，再除10.
+		d /= 100;
 	}
 	return true;
 }
 
 
 int  main(){
-	string str=".,";
-	//string str="A man, a plan, a canal: Panama";
-	cout<< "isPalindrome(str)="<< isPalindrome(str)<<endl;
-
+	//int i=1234674321;
+	int i=123721;
+	cout<< "pow(10,2)="<< pow(10,2)<<endl;
+	cout<< "isPalindrome(str)="<< isPalindrome(i)<<endl;
+	//cout<< "isPalindrome(str)="<< isPalindromeMy(i)<<endl;
 	system("pause");
 }
